@@ -5,7 +5,8 @@
     "service": "quick-paw-app",
     "workspaceFolder": "/app",
     "runServices": [
-        "quick-paw-db"
+        "quick-paw-db",
+        "minio"
     ],
     "shutdownAction": "stopCompose",
     "remoteUser": "debian",

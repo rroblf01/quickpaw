@@ -16,13 +16,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.urls import path
 from django.views import View
 
 
 class HealthCheckView(View):
-    def get(self, request):
+    def get(self, request: HttpRequest) -> JsonResponse:
         return JsonResponse({"status": "ok"})
 
 

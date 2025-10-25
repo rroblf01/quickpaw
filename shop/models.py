@@ -8,5 +8,5 @@ class Product(models.Model):
     image = models.ImageField(upload_to="products/")
     stock = models.PositiveIntegerField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name

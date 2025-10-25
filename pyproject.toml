@@ -12,6 +12,14 @@ dependencies = [
     "django-storages[s3]==1.14.6",
 ]
 
+[tool.mypy]
+plugins = "mypy_django_plugin.main"
+strict = true
+disable_error_code = ["var-annotated"]
+
+[tool.django-stubs]
+django_settings_module = "quick_paw.settings"
+
 [dependency-groups]
 dev = [
     "django-extensions==4.1",
@@ -23,5 +31,3 @@ lint = [
     "django-stubs==5.2.7",
 ]
 
-[tool.ty.environment]
-python = "/usr/local/bin/python"

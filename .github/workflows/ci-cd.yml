@@ -1,0 +1,39 @@
+name: Django CI/CD
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v5
+
+    - name: "Set up Python"
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: "pyproject.toml"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+
+
+    - name: Install Dependencies
+      run: |
+        uv pip install --system -r pyproject.toml --group dev --group lint
+
+    - name: Run Tests
+      run: |
+        python manage.py test
+    
+    - name: Run Mypy Checks
+      run: |
+        python -m mypy .
+
+    - name: Run Ruff Linting
+      run: |
+        python -m ruff check .

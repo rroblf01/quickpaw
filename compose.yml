@@ -12,6 +12,7 @@ services:
       - ./:/app
     depends_on:
       - quick-paw-db
+      - minio
 
   quick-paw-db:
     image: postgres:18.0-alpine3.22
@@ -25,7 +26,24 @@ services:
       timeout: 5s
       retries: 5
 
+  minio:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - minionetwork
+    volumes:
+      - 'minio_data:/data'
+    env_file:
+    - .env
+    command: minio server /data --console-address ":9001"
 
+
+networks:
+  minionetwork:
+    driver: bridge
 
 volumes:
   quick_paw_db_data:
+  minio_data:

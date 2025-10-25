@@ -7,8 +7,18 @@ requires-python = ">=3.14"
 dependencies = [
     "daphne==4.2.1",
     "django==5.2.7",
-    "psycopg[binary]==3.2.11",
+    "psycopg[binary,pool]==3.2.11",
+    "pillow==12.0.0",
+    "django-storages[s3]==1.14.6",
 ]
+
+[tool.mypy]
+plugins = "mypy_django_plugin.main"
+strict = true
+disable_error_code = ["var-annotated"]
+
+[tool.django-stubs]
+django_settings_module = "quick_paw.settings"
 
 [dependency-groups]
 dev = [
@@ -21,5 +31,3 @@ lint = [
     "django-stubs==5.2.7",
 ]
 
-[tool.ty.environment]
-python = "/usr/local/bin/python"

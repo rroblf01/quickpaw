@@ -1,7 +1,11 @@
 FROM python:3.14.0-slim-trixie
 ARG INSTALL_DEV_DEPENDENCIES
 
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=0
+ENV UV_PROJECT_ENVIRONMENT=/usr/local/ \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_LINK_MODE=copy
+
 RUN apt update && apt install -y sudo git
 
 # User
@@ -17,9 +21,11 @@ ENV PYTHONPATH "${PYTHONPATH}:${WORKDIR}"
 RUN rm /usr/local/bin/pip
 COPY --from=ghcr.io/astral-sh/uv:0.9.5-python3.14-trixie-slim /usr/local/bin/uv /usr/local/bin/uv
 
-COPY . $WORKDIR/
-RUN uv pip install --system -r pyproject.toml ${INSTALL_DEV_DEPENDENCIES}
+COPY pyproject.toml uv.lock $WORKDIR/
+RUN uv sync --frozen ${INSTALL_DEV_DEPENDENCIES}
 
-RUN rm -rf /tmp/*
+
+COPY . $WORKDIR/
+RUN python manage.py collectstatic --noinput
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

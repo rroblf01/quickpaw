@@ -5,10 +5,13 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    container: arm64v8/ubuntu:22.04
+    runs-on: ubuntu-latest-arm64
 
     steps:
     - name: Checkout Repository
